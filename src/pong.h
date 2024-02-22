@@ -1,6 +1,6 @@
 #ifndef PONG_H
 #define PONG_H
-#include <utility> 
+#include <utility>
 #define WIDHT 800
 #define HEIGHT 600
 class Pong {
@@ -8,11 +8,11 @@ class Pong {
 		int x; 
 		int y; 
 		int width; 
-		int height; 
+		int height;
 	public: 
 		void Init() {	
-			width = 50; 
-			height = 50;	
+			width = 30; 
+			height = 30;	
 			x = WIDHT / 2 - width / 2 ;		
 			y = HEIGHT / 2 - height / 2; 	
 		}

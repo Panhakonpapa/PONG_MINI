@@ -9,7 +9,7 @@
 #define HEIGHT 600
 #define UP -30 
 #define DOWN 30 
-
+#define CONSTENDIS 800 
 
 // Movement {Bool return value}
 bool checkCollis(int x1, int y1, int w, int h, int x2, int y2, int w2, int h2) {
@@ -17,6 +17,21 @@ bool checkCollis(int x1, int y1, int w, int h, int x2, int y2, int w2, int h2) {
 		x1 + w > x2 &&
 		y1 < y2 + h2 &&
 		y1 + h > y2);
+}
+
+void Aimove(int& x1, int& y1, int x2, int y2, int speeds) {
+	double dalataY = y2 - y1;	
+	double dalataX = x2 - x1;
+	float distances = std::abs(sqrt(dalataY * dalataY + dalataX * dalataX));  
+	
+	if (distances <= CONSTENDIS) {
+		if (y2 > 0) {
+			y1 += static_cast<int>(round((y2 - y1) * speeds / distances));		
+		}	
+		if (y2 < 0) {	
+			y1 -= static_cast<int>(round((y2 - y1) * speeds / distances));		
+		}
+	}
 }
 int main() {
 	SDL_Window* window; 
@@ -57,7 +72,7 @@ int main() {
 	//int xVelosity = 10; 
 	//int yVelosity = 10; 	
 	float angle = 30.0f;
-	float speeds = 5.0f;  
+	float speeds = 8.0f;  
 	int xpong = getPair.first; 
 	int ypong = getPair.second;
 	int wpong = getPairPONG.first; 
@@ -97,38 +112,39 @@ int main() {
 		SDL_RenderClear(renderer);	
 	
 
-						
-		xpong += static_cast<int>(speeds * std::cos(angle * M_PI / 180.0f)); 						
-		ypong += static_cast<int>(speeds * std::sin(angle * M_PI / 180.0f)); 			
-			
-		if (xpong <= 0 || xpong + wpong >= WIDHT) {				
-			// xVelosity =  -xVelosity; 			
-			angle = 180.0f - angle; 	
-		}	
-		if (ypong <= 0 || ypong + hpong >= HEIGHT) {				
 		
+		xpong += static_cast<int>(speeds * std::cos(angle * M_PI / 180.0f)); 						
+		ypong += static_cast<int>(speeds * std::sin(angle * M_PI / 180.0f)); 				
+		if (ypong <= 0 || ypong + hpong >= HEIGHT) {						
 			// yVelosity =  -yVelosity;
 			angle = -angle; 
 		}	
-		
+			
+		if (xpong <= 0 || xpong + wpong >= WIDHT) {				
+			xpong = WIDTH / 2;
+			ypong = HEIGHT / 2; 	
+		}
+
 		SDL_Rect pig = {xpong, ypong, wpong, hpong}; 		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);		
 		SDL_RenderFillRect(renderer, &pig);	
 
-		if (checkCollis(x1, y1, 30, 300, xpong, ypong, wpong, hpong) == true) {
+		if (checkCollis(x1, y1, 20, 300, xpong, ypong, wpong, hpong) == true) {
 				
 			angle = 180.0f - angle; 	
-		}				
-		SDL_Rect pug1 = {x1, y1, 30, 300}; 		
+		}	
+
+		SDL_Rect pug1 = {x1, y1, 20, 200}; 		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);		
 		SDL_RenderFillRect(renderer, &pug1);
 		
+		
+		Aimove(x2, y2, xpong, ypong, 50); 
+		if (checkCollis(x2, y2, 20, 300, xpong, ypong, wpong, hpong) == true) {	
+			angle = 180.0f - angle;	
+		}		
 
-		if (checkCollis(x2, y2, 30, 300, xpong, ypong, wpong, hpong) == true) {
-				
-			angle = 180.0f - angle; 	
-		}			
-		SDL_Rect pug2 = {x2, y2, 30, 300}; 		
+		SDL_Rect pug2 = {x2, y2, 20, 200}; 		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);		
 		SDL_RenderFillRect(renderer, &pug2);
 
