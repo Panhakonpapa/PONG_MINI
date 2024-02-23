@@ -7,8 +7,8 @@
 #include "src/pong.h"
 #define WIDTH 800
 #define HEIGHT 600
-#define UP -30 
-#define DOWN 30 
+#define UP -40 
+#define DOWN 40 
 #define CONSTENDIS 800 
 
 // Movement {Bool return value}
@@ -19,6 +19,29 @@ bool checkCollis(int x1, int y1, int w, int h, int x2, int y2, int w2, int h2) {
 		y1 + h > y2);
 }
 
+void checkBoo1(int& y1) {	 
+    if (y1 + 200 >= HEIGHT) {	     
+        y1 = HEIGHT - 200; 	
+    } 
+}
+
+void checkBoob1(int& y1) {	 
+    if (y1 <= 0) {	                
+        y1 = 0; 	
+    }
+}			
+
+void checkBoo2(int& y2) {	 
+    if (y2 + 200 >= HEIGHT) {	     
+        y2 = HEIGHT - 200; 	
+    } 
+}
+
+void checkBoob2(int& y2) {	 
+    if (y2 <= 0) {	                
+        y2 = 0; 	
+    }
+}			
 void Aimove(int& x1, int& y1, int x2, int y2, int speeds) {
 	double dalataY = y2 - y1;	
 	double dalataX = x2 - x1;
@@ -72,7 +95,7 @@ int main() {
 	//int xVelosity = 10; 
 	//int yVelosity = 10; 	
 	float angle = 30.0f;
-	float speeds = 8.0f;  
+	float speeds = 10.0f;  
 	int xpong = getPair.first; 
 	int ypong = getPair.second;
 	int wpong = getPairPONG.first; 
@@ -133,7 +156,12 @@ int main() {
 				
 			angle = 180.0f - angle; 	
 		}	
-
+		if (y1 + 200 >= HEIGHT) {
+			checkBoo1(y1); 
+		}	
+		if (y1 <= 0) { 
+			checkBoob1(y1);  
+		}	
 		SDL_Rect pug1 = {x1, y1, 20, 200}; 		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);		
 		SDL_RenderFillRect(renderer, &pug1);
@@ -142,8 +170,13 @@ int main() {
 		Aimove(x2, y2, xpong, ypong, 50); 
 		if (checkCollis(x2, y2, 20, 300, xpong, ypong, wpong, hpong) == true) {	
 			angle = 180.0f - angle;	
-		}		
-
+		}			
+		if (y2 + 200 >= HEIGHT) {
+			checkBoo2(y2); 
+		}	
+		if (y2 <= 0) { 
+			checkBoob2(y2);  
+		}	
 		SDL_Rect pug2 = {x2, y2, 20, 200}; 		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);		
 		SDL_RenderFillRect(renderer, &pug2);
